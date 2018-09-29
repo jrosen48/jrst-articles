@@ -4,7 +4,8 @@ library(topicmodels)
 library(tidytext)
 library("ldatuning")
 
-l <- read_rds("all-jrst-data.rds")
+# l <- read_rds("all-jrst-data.rds")
+l <- read_rds("all-scied-data.rds")
 
 abstracts <- map(l, ~ .[["abstract"]])
 dates <- map(l, ~ .[["date"]])

@@ -80,3 +80,5 @@ safe_proc_article <- function(i, d) {
 
 l <- seq(nrow(d)) %>% 
   map(safe_proc_article, d = d)
+
+write_rds(l, "all-scied-data.rds")
