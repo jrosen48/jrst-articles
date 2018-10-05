@@ -2,13 +2,14 @@ library(tidyverse)
 library(rvest)
 
 b <- "https://onlinelibrary.wiley.com/"
-btoc <- "https://onlinelibrary.wiley.com/loi/10982736/year/"
-i <- "https://onlinelibrary.wiley.com/loi/10982736/"
+btoc <- "https://onlinelibrary.wiley.com/loi/1098237X/year/"
+i <- "https://onlinelibrary.wiley.com/loi/1098237X/"
 
 t <- i %>% 
   read_html() %>% 
   html_nodes(".loi-tab-item") %>% 
   html_text()
+
 Sys.sleep(1)
 
 # creates year URL
@@ -16,9 +17,12 @@ yd <- t %>%
   as_data_frame() %>% 
   filter(str_detect(value, "Volume")) %>% 
   mutate(year = str_sub(value, start = 1, end = 4),
-         volume = str_sub(value, start = -2, end = -1),
+         volume = str_sub(value, start = -3, end = -1),
          volume = str_trim(volume)) %>% 
-  mutate(year_url = str_c(btoc, year, sep = ""))
+  mutate(year_url = str_c(btoc, year, sep = ""),
+         volume = as.integer(str_extract(volume, "\\(?[0-9,.]+\\)?")),
+         year = as.integer(year)) %>% 
+  arrange(volume)
 
 # getting article URLs
 
@@ -30,6 +34,7 @@ for (year in seq(nrow(yd))) {
     html_attr("href") %>% 
     str_sub(start = 2) %>%  
     str_c(b, ., sep = "")
+  
   Sys.sleep(1)
   
   for (issue in seq(length(iu))) {
@@ -58,4 +63,4 @@ v <- list.files("data") %>%
   unlist() %>% 
   as_data_frame()
 
-write_csv(v, "all-jrst-articles.csv")
+write_csv(v, "all-scied-articles.csv")
