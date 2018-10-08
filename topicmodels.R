@@ -35,17 +35,18 @@ dtm <- convert(news_dfm, to = "topicmodels")
 
 result <- FindTopicsNumber(
   dtm,
-  topics = seq(from = 2, to = 30, by = 1),
+  topics = seq(from = 5, to = 20, by = 5),
   metrics = c("Griffiths2004", "CaoJuan2009", "Arun2010", "Deveaud2014"),
   method = "Gibbs",
   control = list(seed = 77),
-  mc.cores = 4L,
+  mc.cores = 2L,
   verbose = TRUE
 )
 
-FindTopicsNumber_plot(result)
+l <- FindTopicsNumber_plot(result)
 
-lda <- LDA(dtm, k = 18)
+
+"da". <- LDA(dtm, k = 18)
 
 # word topic
 
